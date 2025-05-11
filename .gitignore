@@ -1,0 +1,50 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+venv/
+.venv/
+build/
+dist/
+*.egg-info/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Pytest cache
+.pytest_cache/
+
+# IDE and editor directories
+.idea/
+.vscode/
+*.iml
+*.sublime-project
+*.sublime-workspace
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Docker related
+docker-compose.override.yml
+.env
+*.log
+
+# ETL data files
+etl/data/
+data/
+app/etl/data/
+
+# Spark artifacts
+spark-warehouse/
+logs/
+
+# Temporary files and folders
+tmp/

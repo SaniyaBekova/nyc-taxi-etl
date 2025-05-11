@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  spark:
+    build:
+      context: ./spark
+      dockerfile: Dockerfile
+    # mount both your code and your data
+    volumes:
+      - ./etl:/app/etl        # <-- your extract.py, transform.py, load.py live here
+      - ./etl/data:/app/etl/data
+    command: ["tail", "-f", "/dev/null"]
+
+  postgres:
+    image: postgres:15
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_USER:     etl_user
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB:       rides
+    ports:
+      - "5432:5432"
+  api:
+    build: ./api
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_USER: etl_user
+      POSTGRES_PASSWORD: secret
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: rides
+      POSTGRES_PORT: 5432
+    ports:
+      - "5001:5000"
+
+volumes:
+  pgdata:
+
