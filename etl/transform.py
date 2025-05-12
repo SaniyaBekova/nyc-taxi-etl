@@ -28,7 +28,15 @@ if __name__ == "__main__":
       col("passenger_count"),
       col("trip_distance"),
       col("fare_amount"),
-      col("duration")
+      col("duration"),
+      col("VendorID").alias("vendor_id"),
+      col("RatecodeID").alias("rate_code"),
+      col("PULocationID").alias("pickup_location_id"),
+      col("DOLocationID").alias("dropoff_location_id"),
+      col("payment_type"),
+      col("tip_amount"),
+      col("tolls_amount"),
+      col("total_amount")
     )
 
     # write one Parquet for all six months

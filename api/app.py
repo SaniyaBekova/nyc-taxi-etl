@@ -30,6 +30,14 @@ class Trip(BaseModel):
     trip_distance:   float
     fare_amount:     float
     duration:        int  # seconds
+    vendor_id:           int
+    rate_code:          int
+    pickup_location_id:  int
+    dropoff_location_id: int
+    payment_type:        int
+    tip_amount:          float
+    tolls_amount:        float
+    total_amount:        float
 
 app = FastAPI(title="NYC Taxi Trips API")
 
@@ -44,7 +52,10 @@ def list_trips(
         cur.execute(
             """
             SELECT pickup_ts, dropoff_ts, passenger_count,
-                   trip_distance, fare_amount, duration
+                   trip_distance, fare_amount, duration,
+                   vendor_id, rate_code, pickup_location_id,
+                   dropoff_location_id, payment_type, tip_amount,
+                   tolls_amount, total_amount
               FROM yellow_trips
              ORDER BY pickup_ts DESC
              LIMIT %s OFFSET %s
@@ -73,6 +84,14 @@ def list_trips(
             trip_distance  = float(row[3]),
             fare_amount    = float(row[4]),
             duration       = secs,
+            vendor_id      = row[6],
+            rate_code      = row[7],
+            pickup_location_id    = row[8],
+            dropoff_location_id   = row[9],
+            payment_type     = row[10],
+            tip_amount       = float(row[11]),
+            tolls_amount     = float(row[12]),
+            total_amount     = float(row[13])
         ))
 
     return trips

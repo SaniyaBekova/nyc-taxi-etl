@@ -1,3 +1,4 @@
+-- 003__create_yellow_trips.sql
 DROP TABLE IF EXISTS yellow_trips;
 
 CREATE TABLE yellow_trips (
@@ -16,3 +17,10 @@ CREATE TABLE yellow_trips (
   tolls_amount        DOUBLE PRECISION,
   total_amount        DOUBLE PRECISION
 );
+
+
+ALTER TABLE yellow_trips
+  ADD CONSTRAINT fk_rate_code
+    FOREIGN KEY (rate_code) REFERENCES rate_codes(code),
+  ADD CONSTRAINT fk_payment_type
+    FOREIGN KEY (payment_type) REFERENCES payment_types(code);
