@@ -31,10 +31,10 @@ class Trip(BaseModel):
     fare_amount:     float
     duration:        int  # seconds
     vendor_id:           int
-    rate_code:          int
-    pickup_location_id:  int
+    rate_code:          str
+    pickup_location_id:  str
     dropoff_location_id: int
-    payment_type:        int
+    payment_type:        str
     tip_amount:          float
     tolls_amount:        float
     total_amount:        float
@@ -51,12 +51,15 @@ def list_trips(
     try:
         cur.execute(
             """
-            SELECT pickup_ts, dropoff_ts, passenger_count,
-                   trip_distance, fare_amount, duration,
-                   vendor_id, rate_code, pickup_location_id,
-                   dropoff_location_id, payment_type, tip_amount,
-                   tolls_amount, total_amount
-              FROM yellow_trips
+            SELECT yts.pickup_ts, yts.dropoff_ts, yts.passenger_count,
+                   yts.trip_distance, yts.fare_amount, yts.duration,
+                   yts.vendor_id, rc.description, pickup_zone.zone,
+                   yts.dropoff_location_id, pt.description, yts.tip_amount,
+                   yts.tolls_amount, yts.total_amount
+              FROM yellow_trips yts
+              left join taxi_zones AS pickup_zone on yts.pickup_location_id = pickup_zone.location_id
+              left join rate_codes as rc ON yts.rate_code = rc.code
+              left join payment_types pt ON yts.payment_type = pt.code
              ORDER BY pickup_ts DESC
              LIMIT %s OFFSET %s
             """,
